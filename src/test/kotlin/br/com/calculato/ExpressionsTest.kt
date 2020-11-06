@@ -14,7 +14,7 @@ class ExpressionsTest : StringSpec({
             eval("13232 * 23455") shouldBe BigDecimal.valueOf(310356560)
             eval("12/(3+20)") shouldBe BigDecimal.valueOf(0.521739)
             eval("12/3+20") shouldBe BigDecimal.valueOf(24)
-            eval("1,2/3+20") shouldBe BigDecimal.valueOf(2.4)
+            eval("1.2/3+20") shouldBe BigDecimal.valueOf(20.4)
             eval("2 + 3 - (12/3+ (20 * 4))") shouldBe BigDecimal.valueOf(-79)
         }
     }

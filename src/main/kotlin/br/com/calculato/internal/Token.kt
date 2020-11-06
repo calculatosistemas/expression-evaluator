@@ -1,13 +1,14 @@
 package br.com.calculato.internal
 
-internal class Token(val type: TokenType,
-                     val lexeme: String,
-                     val literal: Any?) {
+internal class Token(
+    val type: TokenType,
+    val lexeme: String,
+    val literal: Any?
+) {
 
     override fun toString(): String {
         return "$type $lexeme $literal"
     }
-
 }
 
 internal enum class TokenType {
@@ -43,5 +44,4 @@ internal enum class TokenType {
     IDENTIFIER,
 
     EOF
-
 }

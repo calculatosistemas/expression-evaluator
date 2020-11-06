@@ -1,13 +1,25 @@
 package br.com.calculato.internal
 
 import br.com.calculato.ExpressionException
-import br.com.calculato.internal.TokenType.*
+import br.com.calculato.internal.TokenType.AMP_AMP
+import br.com.calculato.internal.TokenType.BAR_BAR
+import br.com.calculato.internal.TokenType.EQUAL_EQUAL
+import br.com.calculato.internal.TokenType.EXPONENT
+import br.com.calculato.internal.TokenType.GREATER
+import br.com.calculato.internal.TokenType.GREATER_EQUAL
+import br.com.calculato.internal.TokenType.LESS
+import br.com.calculato.internal.TokenType.LESS_EQUAL
+import br.com.calculato.internal.TokenType.MINUS
+import br.com.calculato.internal.TokenType.MODULO
+import br.com.calculato.internal.TokenType.NOT_EQUAL
+import br.com.calculato.internal.TokenType.PLUS
+import br.com.calculato.internal.TokenType.SLASH
+import br.com.calculato.internal.TokenType.STAR
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-
-internal class Evaluator() : ExprVisitor<BigDecimal> {
+internal class Evaluator : ExprVisitor<BigDecimal> {
     internal var mathContext: MathContext = MathContext.DECIMAL64
 
     private val variables: LinkedHashMap<String, BigDecimal> = linkedMapOf()
@@ -49,7 +61,8 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
             BAR_BAR -> left or right
             AMP_AMP -> left and right
             else -> throw ExpressionException(
-                "Invalid logical operator '${expr.operator.lexeme}'")
+                "Invalid logical operator '${expr.operator.lexeme}'"
+            )
         }
     }
 
@@ -71,7 +84,8 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
             LESS -> (left < right).toBigDecimal()
             LESS_EQUAL -> (left <= right).toBigDecimal()
             else -> throw ExpressionException(
-                "Invalid binary operator '${expr.operator.lexeme}'")
+                "Invalid binary operator '${expr.operator.lexeme}'"
+            )
         }
     }
 
@@ -88,8 +102,8 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
 
     override fun visitCallExpr(expr: CallExpr): BigDecimal {
         val name = expr.name
-        val function = functions[name.toLowerCase()] ?:
-        throw ExpressionException("Undefined function '$name'")
+        val function = functions[name.toLowerCase()]
+            ?: throw ExpressionException("Undefined function '$name'")
 
         return function.call(expr.arguments.map { eval(it) })
     }
@@ -101,8 +115,8 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
     override fun visitVariableExpr(expr: VariableExpr): BigDecimal {
         val name = expr.name.lexeme
 
-        return variables[name.toLowerCase()] ?:
-        throw ExpressionException("Undefined variable '$name'")
+        return variables[name.toLowerCase()]
+            ?: throw ExpressionException("Undefined variable '$name'")
     }
 
     override fun visitGroupingExpr(expr: GroupingExpr): BigDecimal {
@@ -142,8 +156,10 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
         val remainderOfRight = right.remainder(BigDecimal.ONE)
         val n2IntPart = right.subtract(remainderOfRight)
         val intPow = pow(n2IntPart.intValueExact(), mathContext)
-        val doublePow = BigDecimal(Math
-            .pow(toDouble(), remainderOfRight.toDouble()))
+        val doublePow = BigDecimal(
+            Math
+                .pow(toDouble(), remainderOfRight.toDouble())
+        )
 
         var result = intPow.multiply(doublePow, mathContext)
         if (signOfRight == -1) result = BigDecimal
@@ -151,5 +167,4 @@ internal class Evaluator() : ExprVisitor<BigDecimal> {
 
         return result
     }
-
 }

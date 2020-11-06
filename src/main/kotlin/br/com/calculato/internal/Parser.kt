@@ -1,7 +1,27 @@
 package br.com.calculato.internal
 
-import br.com.calculato.internal.TokenType.*
 import br.com.calculato.ExpressionException
+import br.com.calculato.internal.TokenType.AMP_AMP
+import br.com.calculato.internal.TokenType.ASSIGN
+import br.com.calculato.internal.TokenType.BAR_BAR
+import br.com.calculato.internal.TokenType.COMMA
+import br.com.calculato.internal.TokenType.EOF
+import br.com.calculato.internal.TokenType.EQUAL_EQUAL
+import br.com.calculato.internal.TokenType.EXPONENT
+import br.com.calculato.internal.TokenType.GREATER
+import br.com.calculato.internal.TokenType.GREATER_EQUAL
+import br.com.calculato.internal.TokenType.IDENTIFIER
+import br.com.calculato.internal.TokenType.LEFT_PAREN
+import br.com.calculato.internal.TokenType.LESS
+import br.com.calculato.internal.TokenType.LESS_EQUAL
+import br.com.calculato.internal.TokenType.MINUS
+import br.com.calculato.internal.TokenType.MODULO
+import br.com.calculato.internal.TokenType.NOT_EQUAL
+import br.com.calculato.internal.TokenType.NUMBER
+import br.com.calculato.internal.TokenType.PLUS
+import br.com.calculato.internal.TokenType.RIGHT_PAREN
+import br.com.calculato.internal.TokenType.SLASH
+import br.com.calculato.internal.TokenType.STAR
 import java.math.BigDecimal
 
 internal class Parser(private val tokens: List<Token>) {
@@ -232,5 +252,4 @@ internal class Parser(private val tokens: List<Token>) {
     private fun previous() = tokens[current - 1]
 
     private fun previousTwo() = Pair(tokens[current - 2], tokens[current - 1])
-
 }

@@ -1,15 +1,36 @@
 package br.com.calculato.internal
 
-import br.com.calculato.internal.TokenType.*
 import br.com.calculato.ExpressionException
+import br.com.calculato.internal.TokenType.AMP_AMP
+import br.com.calculato.internal.TokenType.ASSIGN
+import br.com.calculato.internal.TokenType.BAR_BAR
+import br.com.calculato.internal.TokenType.COMMA
+import br.com.calculato.internal.TokenType.EOF
+import br.com.calculato.internal.TokenType.EQUAL_EQUAL
+import br.com.calculato.internal.TokenType.EXPONENT
+import br.com.calculato.internal.TokenType.GREATER
+import br.com.calculato.internal.TokenType.GREATER_EQUAL
+import br.com.calculato.internal.TokenType.IDENTIFIER
+import br.com.calculato.internal.TokenType.LEFT_PAREN
+import br.com.calculato.internal.TokenType.LESS
+import br.com.calculato.internal.TokenType.LESS_EQUAL
+import br.com.calculato.internal.TokenType.MINUS
+import br.com.calculato.internal.TokenType.MODULO
+import br.com.calculato.internal.TokenType.NOT_EQUAL
+import br.com.calculato.internal.TokenType.NUMBER
+import br.com.calculato.internal.TokenType.PLUS
+import br.com.calculato.internal.TokenType.RIGHT_PAREN
+import br.com.calculato.internal.TokenType.SLASH
+import br.com.calculato.internal.TokenType.STAR
 import java.math.MathContext
 
 private fun invalidToken(c: Char) {
     throw ExpressionException("Invalid token '$c'")
 }
 
-internal class Scanner(private val source: String,
-                       private val mathContext: MathContext
+internal class Scanner(
+    private val source: String,
+    private val mathContext: MathContext
 ) {
 
     private val tokens: MutableList<Token> = mutableListOf()
@@ -31,9 +52,8 @@ internal class Scanner(private val source: String,
 
     private fun scanToken() {
         start = current
-        val c = advance()
 
-        when (c) {
+        when (val c = advance()) {
             ' ',
             '\r',
             '\t' -> {
@@ -64,14 +84,16 @@ internal class Scanner(private val source: String,
         }
     }
 
-    private fun isDigit(char: Char,
-                        previousChar: Char = '\u0000',
-                        nextChar: Char = '\u0000'): Boolean {
+    private fun isDigit(
+        char: Char,
+        previousChar: Char = '\u0000',
+        nextChar: Char = '\u0000'
+    ): Boolean {
         return char.isDigit() || when (char) {
-            '.'      -> true
+            '.' -> true
             'e', 'E' -> previousChar.isDigit() && (nextChar.isDigit() || nextChar == '+' || nextChar == '-')
             '+', '-' -> (previousChar == 'e' || previousChar == 'E') && nextChar.isDigit()
-            else     -> false
+            else -> false
         }
     }
 
@@ -133,10 +155,9 @@ internal class Scanner(private val source: String,
 
     private fun Char.isAlphaNumeric() = isAlpha() || isDigit()
 
-    private fun Char.isAlpha() = this in 'a'..'z'
-            || this in 'A'..'Z'
-            || this == '_'
+    private fun Char.isAlpha() = this in 'a'..'z' ||
+        this in 'A'..'Z' ||
+        this == '_'
 
     private fun Char.isDigit() = this == '.' || this in '0'..'9'
-
 }
